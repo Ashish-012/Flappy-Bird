@@ -1,6 +1,8 @@
 import pygame
 import sys
 import random
+
+
 pygame.init()
 
 
@@ -12,7 +14,8 @@ def draw_floor(floor_x):
     return floor_x
 
 def create_pipe():
-    pipe_rect = pipe_surface.get_rect(midtop = (500,400))
+    random_height = random.choice(pipe_height)
+    pipe_rect = pipe_surface.get_rect(midtop = (600,random_height))
     return pipe_rect
 
 def move_pipes(pipes):
@@ -50,10 +53,10 @@ bird = pygame.transform.scale(bird,(45,35))
 bird_rect = bird.get_rect(center = (100,height//2))
 
 pipe_surface = pygame.image.load('assets/pipe-green.png')
-pipe_surface = pygame.transform.scale(pipe_surface,(90,200))
+pipe_surface = pygame.transform.scale(pipe_surface,(90,400))
 
 pipes = []
-pipe_height = []
+pipe_height = [200,230,280,300,360,420,460]
 spawn_pipe = pygame.USEREVENT
 pygame.time.set_timer(spawn_pipe,1200)
 
@@ -100,7 +103,6 @@ while play:
     window.blit(bird,bird_rect)
 
     
-
     #updating game window
     pygame.display.update()
     clock.tick(FPS)
