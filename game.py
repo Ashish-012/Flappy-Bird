@@ -30,9 +30,23 @@ def draw_pipes(pipes):
     for pipe in pipes:
         if pipe.bottom >=650 :
             window.blit(pipe_surface,pipe)
+        
         else:
             flip_pipe = pygame.transform.flip(pipe_surface,False,True)
             window.blit(flip_pipe,pipe)
+
+
+def check_collisions(pipes):
+    for pipe in pipes:
+        if bird_rect.colliderect(pipe):
+            return False
+
+    if bird_rect.top <= -100 or bird_rect.bottom >= height-100:
+        return False
+
+    return True
+
+
 # Screen Resolution
 width = 550
 height = 650
@@ -61,6 +75,8 @@ pipe_surface = pygame.transform.scale(pipe_surface,(90,600))
 
 pipes = []
 pipe_height = [260,300,340,360,380,400,420,460,480,500,510]
+
+
 spawn_pipe = pygame.USEREVENT
 pygame.time.set_timer(spawn_pipe,1200)
 
@@ -69,6 +85,7 @@ gravity = 0.25
 bird_movement = 0
 
 play = True
+game_active = True
 
 while play:
     
@@ -81,7 +98,7 @@ while play:
             if event.key == pygame.K_SPACE:
                 bird_movement = 0
                 bird_movement -= 8
-        if event.type == spawn_pipe:
+        if event.type == spawn_pipe and game_active == True:
             pipes.extend(create_pipe())
             print(pipes)
             
@@ -90,21 +107,26 @@ while play:
 
     window.blit(background,(0,0))  
 
-    #drawing the pipes
-    pipes = move_pipes(pipes)
-    draw_pipes(pipes)
+    if game_active == True:
+        #drawing the pipes
+        pipes = move_pipes(pipes)
+        draw_pipes(pipes)
+
+        
+        #drawing the bird
+
+        bird_movement += gravity
+        bird_rect.centery += bird_movement
+        window.blit(bird,bird_rect)
+
+        # collisions
+
+        game_active = check_collisions(pipes)
 
     #drawing the floor
     
     floor_x -= 4
     floor_x = draw_floor(floor_x)
-
-    #drawing the bird
-
-    bird_movement += gravity
-    bird_rect.centery += bird_movement
-    window.blit(bird,bird_rect)
-
     
     #updating game window
     pygame.display.update()
