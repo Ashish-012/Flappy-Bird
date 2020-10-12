@@ -95,12 +95,17 @@ while play:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE and game_active == True:
                 bird_movement = 0
                 bird_movement -= 8
+            if event.key == pygame.K_SPACE and game_active == False:
+                game_active = True
+                bird_rect.center = (100,height//2)
+                pipes.clear()
+                bird_movement= 0
+                
         if event.type == spawn_pipe and game_active == True:
             pipes.extend(create_pipe())
-            print(pipes)
             
                 
     #drawing the background
