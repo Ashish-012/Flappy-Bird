@@ -77,6 +77,11 @@ pipes = []
 pipe_height = [260,300,340,360,380,400,420,460,480,500,510]
 
 
+game_over_image = pygame.image.load('assets/gameover.png')
+game_over_image = pygame.transform.scale(game_over_image,(380,100))
+game_over_rect = game_over_image.get_rect(center = (width//2,height//2))
+
+
 spawn_pipe = pygame.USEREVENT
 pygame.time.set_timer(spawn_pipe,1200)
 
@@ -98,6 +103,7 @@ while play:
             if event.key == pygame.K_SPACE and game_active == True:
                 bird_movement = 0
                 bird_movement -= 8
+                
             if event.key == pygame.K_SPACE and game_active == False:
                 game_active = True
                 bird_rect.center = (100,height//2)
@@ -127,6 +133,9 @@ while play:
         # collisions
 
         game_active = check_collisions(pipes)
+    
+    else:
+        window.blit(game_over_image, game_over_rect)
 
     #drawing the floor
     
