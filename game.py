@@ -46,6 +46,10 @@ def check_collisions(pipes):
 
     return True
 
+def render_score():
+    score_display = score_font.render(str(int(score)), True, (255,255,255) )
+    score_rect = score_display.get_rect(center = (width//2, 120))
+    window.blit(score_display, score_rect)
 
 # Screen Resolution
 width = 550
@@ -81,6 +85,8 @@ game_over_image = pygame.image.load('assets/gameover.png')
 game_over_image = pygame.transform.scale(game_over_image,(380,100))
 game_over_rect = game_over_image.get_rect(center = (width//2,height//2))
 
+score_font = pygame.font.Font('04B_19.ttf',40)
+
 
 spawn_pipe = pygame.USEREVENT
 pygame.time.set_timer(spawn_pipe,1200)
@@ -88,6 +94,7 @@ pygame.time.set_timer(spawn_pipe,1200)
 floor_x = 0
 gravity = 0.25
 bird_movement = 0
+score = 0
 
 play = True
 game_active = True
@@ -109,6 +116,7 @@ while play:
                 bird_rect.center = (100,height//2)
                 pipes.clear()
                 bird_movement= 0
+                score = 0
                 
         if event.type == spawn_pipe and game_active == True:
             pipes.extend(create_pipe())
@@ -122,7 +130,6 @@ while play:
         #drawing the pipes
         pipes = move_pipes(pipes)
         draw_pipes(pipes)
-
         
         #drawing the bird
 
@@ -130,9 +137,15 @@ while play:
         bird_rect.centery += bird_movement
         window.blit(bird,bird_rect)
 
+        #drawing the score
+
+        render_score()
+        score += 0.01
+
         # collisions
 
         game_active = check_collisions(pipes)
+
     
     else:
         window.blit(game_over_image, game_over_rect)
